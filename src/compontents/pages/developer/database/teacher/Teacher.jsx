@@ -7,8 +7,22 @@ import { FiPlus } from 'react-icons/fi'
 import DatabaseInfomration from '../DatabaseInfomration'
 import { CiSearch } from 'react-icons/ci'
 import ModalAddTeacher from './ModalAddTeacher'
+import useQueryData from '../../../../custom-hook/useQueryData'
 
 const Teacher = () => {
+
+  const {
+    isLoading,
+    isFetching,
+    error,
+    data: teacher,
+  } = useQueryData(
+    "/v1/teacher", // endpoint
+    "get", // method
+    "teacher" // key
+  );
+  
+
     // event Listener for view table data
     const [showInfo, setShowInfo] = React.useState(false);
     const handleShowInfo =  () => {setShowInfo(!showInfo)};
@@ -41,7 +55,7 @@ const Teacher = () => {
               </ul>
                 <button className='btn btn--accent flex items-center gap-2' onClick={handleAddTeacher}>Add New Teacher Member<FiPlus/></button>
             </div>
-           <StaffTable setShowInfo={setShowInfo} showInfo={showInfo} />
+           <StaffTable setShowInfo={setShowInfo} showInfo={showInfo} teacher={teacher} isLoading={isLoading} />
               {/* main div */}
             </div>
           <DatabaseInfomration showInfo={showInfo} />

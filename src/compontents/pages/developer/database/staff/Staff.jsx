@@ -7,8 +7,21 @@ import { FiPlus } from 'react-icons/fi'
 import DatabaseInfomration from '../DatabaseInfomration'
 import { CiSearch } from 'react-icons/ci'
 import ModalAddStaff from './ModalAddStaff'
+import useQueryData from '../../../../custom-hook/useQueryData'
 
 const Staff = () => {
+
+  const {
+    isLoading,
+    isFetching,
+    error,
+    data: staff,
+  } = useQueryData(
+    "/v1/staff", // endpoint
+    "get", // method
+    "staff" // key
+  );
+  
     const [showInfo, setShowInfo] = React.useState(false);
     const handleShowInfo =  () => {setShowInfo(!showInfo)};
 
@@ -41,7 +54,7 @@ const Staff = () => {
               </ul>
                 <button className='btn btn--accent flex items-center gap-2' onClick={handleAddStaff}>Add New Staff Member<FiPlus/></button>
             </div>
-           <StaffTable setShowInfo={setShowInfo} showInfo={showInfo} />
+           <StaffTable setShowInfo={setShowInfo} showInfo={showInfo} staff={staff} isLoading={isLoading} />
               {/* main div */}
             </div>
           <DatabaseInfomration showInfo={showInfo} />

@@ -6,6 +6,7 @@ import Staff from './compontents/pages/developer/database/staff/Staff'
 import PageError from './compontents/partials/pageNotFound/PageError'
 import CheckerHome from './compontents/pages/developer/database/checker/CheckerHome'
 import { baseImgUrl } from './compontents/helpers/functions-general'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 
 
@@ -16,15 +17,17 @@ const NotFound = () => {
     <div className='flex flex-col justify-center items-center h-screen'>
      <h1 className='text-accent text-3xl'> <span className='italic'>404</span> - Page Not Found</h1>
       <p>Sorry, the page you are looking for could not be found.</p>
-      <img src="/public/404.gif" alt="ducking-around" className='size-[20rem] transition-all rounded-md border-4 bg-gradient-to-r from-blue-500 to-purple-500' />
+      <img src="/public/404.gif" alt="ducking-around" className='size-[20rem] transition-all rounded-md border-2 border-gradient-to-r from-blue-500 to-purple-500' />
      </div>
     </div>
     </>
   );
 };
 function App() {
+  const queryClient = new QueryClient;
   return (
     <>
+    <QueryClientProvider client={queryClient}>
    <Router>
         <Routes>
             <Route path='/database/student' element={<Student/>}/>
@@ -34,6 +37,7 @@ function App() {
             <Route path="*" element={<NotFound />} />
         </Routes>
     </Router>
+    </QueryClientProvider>
     </>
   )
 }

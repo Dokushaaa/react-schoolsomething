@@ -1,6 +1,6 @@
 import React from 'react'
 import { PiArchive } from 'react-icons/pi'
-import { LiaEdit, LiaEnvelope, LiaHistorySolid, LiaTrashSolid } from 'react-icons/lia'
+import { LiaEdit, LiaEnvelope, LiaHistorySolid, LiaTrashAltSolid, LiaTrashSolid } from 'react-icons/lia'
 import TableLoader from '../../../../partials/TableLoader'
 import NoData from '../../../../partials/NoData';
 import ModalConfirm from '../../../../partials/modals/ModalConfirm'
@@ -11,8 +11,10 @@ import ModalArchive from '../../../../partials/modals/ModalArchive'
 
 
 
-const StudentTable = ({setShowInfo, showInfo}) => {
+const StudentTable = ({setShowInfo, showInfo, isLoading, student}) => {
     const handleShowInfo =  () => {setShowInfo(!showInfo)};
+
+    let counter =1;
 
         // const tooltipConfirm event listeners
         const [tooltipConfirm, setTooltipConfirm] = React.useState(false);
@@ -49,30 +51,41 @@ const StudentTable = ({setShowInfo, showInfo}) => {
                 </tr>
               </thead>
                 <tbody>
+                {isLoading && ( 
                 <tr>
-                  <td colSpan={9}>
-                  <TableLoader count="28" cols="7" />
-                  </td>
-                </tr>
-                <tr>
-                  <td colSpan={9}><NoData/></td>
-                </tr>
-                <tr onDoubleClick={handleShowInfo}>
-                    <td>1</td>
-                    <td>Robert Fox</td>
-                    <td>Science 4</td>
-                    <td>7</td>
-                    <td>Male</td>
-                    <td>robertfox@gmail.com</td>
-                    <td className='table-action'>
-                      <ul className='table-action-menu'>
-                      <li><button  className="tooltip" data-tooltip="Edit"><LiaEdit/></button></li>
-                      <li><button onClick={handleToolArchive} className="tooltip" data-tooltip="Archive"><PiArchive/></button></li>
-                      <li><button onClick={handleToolHistory}  className="tooltip" data-tooltip="Restore"><LiaHistorySolid/></button></li>
-                      <li><button onClick={handleToolDelete} className="tooltip" data-tooltip="Delete"><LiaTrashSolid/></button></li>
-                    </ul>
+                    <td colSpan={9}>
+                        <TableLoader count="20" cols="4"/>
                     </td>
-                </tr>
+                </tr>)
+                }
+
+                {student?.data.length === 0 && (
+                    <tr>
+                        <td colSpan={9}>
+                            <NoData/>
+                        </td>
+                    </tr>
+                )}
+             
+                {student?.data.map((itemStudent, keyStudent) => (
+                        <tr onDoubleClick={handleShowInfo}>
+                            <td>{counter++}</td>
+                            <td>{itemStudent.student_name}</td>
+                            <td>{itemStudent.student_class}</td>
+                            <td>{itemStudent.student_age}</td>
+                            <td>Male</td>
+                            <td>robert.fox@gmail.com</td>
+                            <td className='table-action'>
+                                <ul>
+                                  {itemStudent.student_us_active ? (     <>                 <li><button className="tooltip" data-tooltip="Edit"><LiaEdit/></button></li>
+                      <li><button onClick={handleToolArchive} className="tooltip" data-tooltip="Archive"><PiArchive/></button></li> </>) : (          <>            <li><button onClick={handleToolHistory}  className="tooltip" data-tooltip="Restore"><LiaHistorySolid/></button></li>
+                      <li><button onClick={handleToolDelete} className="tooltip" data-tooltip="Delete"><LiaTrashSolid/></button></li> </>)}
+
+                                </ul>
+                            </td>
+                        </tr>
+                    ))              
+                }
                 </tbody>
               </table>
             </div>

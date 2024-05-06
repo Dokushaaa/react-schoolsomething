@@ -11,9 +11,10 @@ import ModalError from '../../../../partials/modals/ModalError'
 import ModalArchive from '../../../../partials/modals/ModalArchive';
 
 
-const TeacherTable = ({setShowInfo, showInfo}) => {
+const TeacherTable = ({setShowInfo, showInfo, isLoading, teacher}) => {
     const handleShowInfo =  () => {setShowInfo(!showInfo)};
     
+    let counter =1;
     
     // const tooltipConfirm event listeners
     const [tooltipConfirm, setTooltipConfirm] = React.useState(false);
@@ -40,39 +41,55 @@ const TeacherTable = ({setShowInfo, showInfo}) => {
                 <tr>
                   <th className='w-[20px]'>#</th>
                   <th className='w-[150px]'>Name</th>
-                  <th className='w-[80px]'>Occupation</th>
-                  <th className='w-[80px]'>Major in</th>
+                  <th className='w-[80px]'>Class</th>
+                  <th className='w-[80px]'>Age</th>
                   <th className='w-[80px]'>Gender</th>
                   <th className='w-[80px]'>Email</th>
                   <th className='w-[100px]'>Action</th>
                 </tr>
               </thead>
                 <tbody>
+                {isLoading && ( 
                 <tr>
-                  <td colSpan={9}>`
-                  <TableLoader count="28" cols="7" />
-                  </td>
-                </tr>
-                <tr>
-                  <td colSpan={9}><NoData/></td>
-                </tr>
-                <tr onDoubleClick={handleShowInfo}>
-                    <td>1</td>
-                    <td>Robert Fox</td>
-                    <td>Science 4</td>
-                    <td>7</td>
-                    <td>Male</td>
-                    <td>robertfox@gmail.com</td>
-                    <td className='table-action'>
-                      <ul className='table-action-menu'>
-                      <li><button  className="tooltip" data-tooltip="Edit"><LiaEdit/></button></li>
-                      <li><button onClick={handleToolArchive} className="tooltip" data-tooltip="Archive"><PiArchive/></button></li>
-                      <li><button onClick={handleToolHistory}  className="tooltip" data-tooltip="Restore"><LiaHistorySolid/></button></li>
-                      <li><button onClick={handleToolDelete} className="tooltip" data-tooltip="Delete"><LiaTrashSolid/></button></li>
-                    </ul>
+                    <td colSpan={9}>
+                        <TableLoader count="20" cols="4"/>
                     </td>
-                </tr>
-                </tbody>`
+                </tr>)
+                }
+
+                {teacher?.data.length === 0 && (
+                    <tr>
+                        <td colSpan={9}>
+                            <NoData/>
+                        </td>
+                    </tr>
+                )}
+             
+                {teacher?.data.map((itemTeacher, keyTeacher) => (
+                        <tr  onDoubleClick={handleShowInfo}>
+                            <td>{counter++}</td>
+                            <td>{itemTeacher.teacher_name}</td>
+                            <td>{itemTeacher.teacher_class}</td>
+                            <td>{itemTeacher.teacher_age}</td>
+                            <td>Male</td>
+                            <td>robert.fox@gmail.com</td>
+                            <td className='table-action'>
+                                <ul>
+                                  {itemTeacher.teacher_us_active ? (     
+                                  <>
+                                  <li><button className="tooltip" data-tooltip="Edit"><LiaEdit/></button></li>
+                                  <li><button onClick={handleToolArchive} className="tooltip" data-tooltip="Archive"><PiArchive/></button></li> </>
+                                ) : (
+                                  <>
+                                  <li><button onClick={handleToolHistory}  className="tooltip" data-tooltip="Restore"><LiaHistorySolid/></button></li>
+                                  <li><button onClick={handleToolDelete} className="tooltip" data-tooltip="Delete"><LiaTrashSolid/></button></li> </>)}
+
+                                </ul>
+                            </td>
+                        </tr>
+                    ))              
+                }
+                </tbody>
               </table>
             </div>
     {tooltipConfirm && <ModalConfirm position={"center"} setTooltipConfirm={setTooltipConfirm} /> }

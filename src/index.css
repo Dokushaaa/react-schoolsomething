@@ -91,27 +91,31 @@
   table tbody tr:nth-child(odd){
     @apply bg-primary bg-opacity-20
   }
+  main{
+    @apply transition-all duration-500
+  } 
+
   
  
 }
 @layer components{
   .nav{
-    @apply  space-y-4 mt-20 font-fontBase
+    @apply  space-y-4 mt-20 font-fontBase transition-all duration-500
   }
    .nav .nav-link{
-    @apply p-1 pl-8 text-lg
+    @apply p-1 pl-8 text-lg transition-all duration-500
    }
    .nav .nav-link a{
-    @apply flex gap-3 items-center
+    @apply flex gap-3 items-center transition-all duration-500
    }
    .nav .nav-link.active a{
-    @apply text-accent
+    @apply text-accent transition-all duration-500
    }
    .nav .nav-link.active{
-    @apply border-l border-accent
+    @apply border-l border-accent transition-all duration-500
    }
    .searchBar .searchIcon{
-    @apply  text-content;
+    @apply  text-content
    }
    .searchBar input{
     @apply bg-primary text-content;

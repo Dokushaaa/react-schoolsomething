@@ -8,6 +8,7 @@ import { LiaEdit, LiaEnvelope, LiaHistorySolid, LiaKeySolid, LiaTrashSolid } fro
 import StudentTable from './StudentTable'
 import DatabaseInfomration from '../DatabaseInfomration'
 import ModalAddStudent from './ModalAddStudent'
+import useQueryData from '../../../../custom-hook/useQueryData'
 // import ModalError from '../../../../partials/modals/ModalError'
 // import ModalValidate from '../../../../partials/modals/ModalValidate'
 // import ModalConfirm from '../../../../partials/modals/ModalConfirm'
@@ -16,6 +17,18 @@ import ModalAddStudent from './ModalAddStudent'
 
 
 const Student = () => {
+const {
+    isLoading,
+    isFetching,
+    error,
+    data: student,
+  } = useQueryData(
+    "/v1/student", // endpoint
+    "get", // method
+    "student" // key
+  );
+  
+
   const [showInfo, setShowInfo] = React.useState(false);
   const handleShowInfo =  () => {setShowInfo(!showInfo)};
 
@@ -46,7 +59,7 @@ const Student = () => {
               </ul>
                 <button className='btn btn--accent flex items-center gap-2' onClick={handleAddStudent}>Add New Student<FiPlus/></button>
             </div>
-           <StudentTable setShowInfo={setShowInfo} showInfo={showInfo} />
+           <StudentTable setShowInfo={setShowInfo} showInfo={showInfo} isLoading={isLoading} student={student}/>
               {/* main div */}
             </div>
           <DatabaseInfomration showInfo={showInfo} />
