@@ -24,6 +24,7 @@ const ModalConfirm = ({
     onSuccess: (data) => {
       // Invalidate and refetch
       queryClient.invalidateQueries({ queryKey: [queryKey] });
+      
 
       if (data.success) {
         dispatch(setIsActive(false))
