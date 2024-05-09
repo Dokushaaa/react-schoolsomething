@@ -8,11 +8,14 @@ import { InputSelect, InputText } from "../../../../helpers/FormInputs";
 import { Form, Formik } from "formik";
 // import * as Yup from 'yup'
 import { object, string, number } from "yup";
+import { StoreContext } from "../../../../../store/StoreContext";
+import { setIsAdd} from "../../../../../store/StoreAction";
 
-const ModalAddStudent = ({ setIsAdd, setMessage, setIsSuccess, itemEdit, setIsError }) => {
+const ModalAddStudent = ({itemEdit}) => {
   
 
-  const handleClose = () => setIsAdd(false);
+  const {dispatch, store} = React.useContext(StoreContext);
+  const handleClose =  () => dispatch(setIsAdd(false));
 
   const queryClient = useQueryClient();
   const mutation = useMutation({
@@ -28,9 +31,9 @@ const ModalAddStudent = ({ setIsAdd, setMessage, setIsSuccess, itemEdit, setIsEr
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["student"] });
       if (data.success) {
-        setIsAdd(false);
-        setIsSuccess(true);
-        setMessage(`Successfuly updated.`);
+        dispatch(setIsAdd(false));
+        dispatch(setSuccess(true));
+        dispatch(setMessage(`Successfuly updated.`));
       } else {
         setIsError(true);
         setMessage(`Failed updating database.`);

@@ -1,9 +1,13 @@
 import React from 'react'
 import { FaTimes } from 'react-icons/fa';
 import { LiaEdit, LiaEnvelope, LiaHistorySolid, LiaKeySolid, LiaTrashSolid } from 'react-icons/lia'
+import { StoreContext } from "../../../../../store/StoreContext";
+import { setIsAdd, setIsShow } from "../../../../../store/StoreAction";
 
-const StudentInformation = ({showInfo, itemData, itemState, setShowInfo}) => {
-  const handleClose = () => setShowInfo(false);
+
+const StudentInformation = ({itemData, showInfo, setShowInfo}) => {
+  const {store, dispatch} = React.useContext(StoreContext);
+  const handleClose = () => dispatch(setIsShow(false))
   const initVal = {
     student_name: itemData ? itemData.student_name : "",
     student_class: itemData ? itemData.student_class : "",
@@ -11,11 +15,11 @@ const StudentInformation = ({showInfo, itemData, itemState, setShowInfo}) => {
     student_gender: itemData ? itemData.student_gender : "",
     student_email: itemData ? itemData.student_email : "",
   };
-  // console.log(itemState);
-  // console.log(itemData);
+
+
   return (
     <>
-      <div  initialValues={initVal} className={`information absolute transition-all border-l border-line h-[calc(100vh-65px)] w-1/4 ${showInfo ? "right-0" : "-right-1/4"}`}>
+      <div  initialValues={initVal} className={`information absolute transition-all border-l border-line h-[calc(100vh-65px)] w-1/4 ${store.isShow ? "right-0 bg-primary" : "-right-1/4"}`}>
               <button onClick={handleClose} className='absolute top-0 right-0 size-10 grid place-content-center bg-secondary text-content'><FaTimes/></button>
               <div className='p-8'>
               <div className="text-center mb-8">

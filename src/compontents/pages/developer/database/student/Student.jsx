@@ -10,8 +10,11 @@ import useQueryData from "../../../../custom-hook/useQueryData";
 import Toast from "../../../../partials/Toast";
 import StudentInformation from "./StudentInfomration";
 import Searchbar from "./SearchBar";
+import { StoreContext } from "../../../../../store/StoreContext";
+import { setIsAdd } from "../../../../../store/StoreAction";
 
 const Student = () => {
+  const {store, dispatch} = React.useContext(StoreContext);
    // for databaseinformation
  const [itemData, setItemData] = React.useState('');
  const [itemState, setItemState] = React.useState('');
@@ -27,10 +30,15 @@ const Student = () => {
   const [showInfo, setShowInfo] = React.useState(false);
   const handleShowInfo = () => setShowInfo(!showInfo);
   
-  const [isAdd, setIsAdd] = React.useState(false);
+  
+  
+  
   const handleAdd = () => {
-    setIsAdd(true), setItemEdit(null);
+    dispatch(setIsAdd(true));
+    (setItemEdit(null));
   };
+
+ 
 
   const {
     isLoading,
@@ -40,7 +48,8 @@ const Student = () => {
   } = useQueryData(
     isSearch ? "/v1/student/search" : "/v1/student", // endpoint
     isSearch ? "post" : "get", // method
-    ["student", isSearch], // key
+    "student", //key
+    // ["student", isSearch],
     {
         searchValue: keyword
     }
@@ -57,7 +66,7 @@ const Student = () => {
         <div className="flex relative">
           <div
             className={`main-wrapper transition-all px-4 py-3 ${
-              showInfo ? "w-3/4" : "w-full"
+              store.isShow ? "w-3/4" : "w-full"
             }`}
           >
             <div className="flex justify-between items-center">
@@ -81,7 +90,6 @@ const Student = () => {
               isLoading={isLoading}
               student={student}
               setItemEdit={setItemEdit}
-              setIsAdd={setIsAdd}
 
               setIsSuccess={setIsSuccess}
               setMessage={setMessage}
@@ -103,17 +111,12 @@ const Student = () => {
           showAddStudent={showAddStudent}
         />
       )} */}
-      {isAdd && (
+      {store.isAdd && 
         <ModalAddStudent
-          setIsAdd={setIsAdd}
-          setIsSuccess={setIsSuccess}
-          setMessage={setMessage}
           itemEdit={itemEdit}
-          
-          setIsError={setIsError}
         />
-      )}
-      {isSuccess && <Toast setIsSuccess={setIsSuccess} message={message} setIsError={setIsError} />}
+      }
+      {store.success && <Toast/>}
       {isError && <Toast setIsSuccess={setIsSuccess} message={message} setIsError={setIsError} />}
     </section>
   );

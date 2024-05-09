@@ -7,6 +7,7 @@ import PageError from './compontents/partials/pageNotFound/PageError'
 import CheckerHome from './compontents/pages/developer/database/checker/CheckerHome'
 import { baseImgUrl } from './compontents/helpers/functions-general'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { StoreProvider } from './store/StoreContext'
 
 
 
@@ -28,15 +29,17 @@ function App() {
   return (
     <>
     <QueryClientProvider client={queryClient}>
-   <Router>
-        <Routes>
-            <Route path='/database/student' element={<Student/>}/>
-            <Route path='/database/teacher' element={<Teacher/>}/>
-            <Route path='/database/staff' element={<Staff/>}/>
-            <Route path='/database/checker' element={<CheckerHome/>}/>
-            <Route path="*" element={<NotFound />} />
-        </Routes>
-    </Router>
+      <StoreProvider>
+            <Router>
+              <Routes>
+                <Route path='/database/student' element={<Student/>}/>
+                <Route path='/database/teacher' element={<Teacher/>}/>
+                <Route path='/database/staff' element={<Staff/>}/>
+                <Route path='/database/checker' element={<CheckerHome/>}/>
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+           </Router>
+    </StoreProvider>
     </QueryClientProvider>
     </>
   )

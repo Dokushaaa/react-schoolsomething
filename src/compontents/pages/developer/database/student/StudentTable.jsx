@@ -6,52 +6,54 @@ import NoData from "../../../../partials/NoData";
 import SpinnerFetching from "../../../../partials/spinners/SpinnerFetching";
 import ModalConfirm from "../../../../partials/modals/ModalConfirm";
 import ModalDelete from "../../../../partials/modals/ModalDelete";
+import { StoreContext } from "../../../../../store/StoreContext";
+import { setIsShow, setIsAdd, setIsActive, setIsDelete, setIsArchive } from "../../../../../store/StoreAction";
 
 const StudentTable = ({
-  setShowInfo,
-  showInfo,
   isLoading,
   student,
   setItemEdit,
-  setIsAdd,
   setIsSuccess,
   setMessage,
   setIsError,
   setItemData,
-  setItemState
 }) => {
-  const handleShowInfo = () => {setShowInfo(!showInfo); setItemData(item)}; 
+  const {store, dispatch} = React.useContext(StoreContext)
    let counter = 1;
 
+
   const showDatabaseInfo = (item) => {
-    setItemData(item);
-    setShowInfo(true);
-    setItemState('studentTable');
+    setItemData(item)
+    dispatch(setIsShow(true))
+    console.log(store.isShow);
+    
   }
   const handleEdit = (item) => {
     setItemEdit(item);
-    setIsAdd(true);
+    dispatch(setIsAdd(true))
   };
 
-  const [isActive, setIsActive] = React.useState(false);
+
   const [id, setId] = React.useState("");
   const [isArchiving, setIsArchiving] = React.useState(0);
-  const [isDelete, setIsDelete] = React.useState(false);
+  
 
   const handleArchive = (item) => {
-    setIsActive(true);
+    dispatch(setIsActive(true))
     setId(item.student_aid);
+    // dispatch(setIsArchive(0));
     setIsArchiving(0);
   };
 
   const handleRestore = (item) => {
-    setIsActive(true);
+    dispatch(setIsActive(true))
     setId(item.student_aid);
+    // dispatch(setIsArchive(1));
     setIsArchiving(1);
   };
 
   const handleDelete = (item) => {
-    setIsDelete(true);
+    dispatch(setIsDelete(true));
     setId(item.student_aid);
   };
 
@@ -146,23 +148,21 @@ const StudentTable = ({
           </tbody>
         </table>
       </div>
-      {isActive && (
+      {store.isActive && (
         <ModalConfirm
           position={"center"}
-          setIsActive={setIsActive}
-          isArchiving={isArchiving}
           queryKey={"student"}
           endpoint={`/v1/student/active/${id}`}
-          
+          isArchiving={isArchiving}
           setIsSuccess={setIsSuccess}
           setMessage={setMessage}
           setIsError={setIsError}
         />
       )}
-      {isDelete && (
+      {store.isDelete && (
         <ModalDelete
           position={"center"}
-          setIsDelete={setIsDelete}
+         
           handleDelete={handleDelete}
           queryKey={"student"}
           endpoint={`/v1/student/${id}`}
