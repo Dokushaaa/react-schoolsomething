@@ -13,10 +13,10 @@ export default {
         content: 'rgb(var(--content) / <alpha-value>)',
         line:'rgb(var(--line) / <alpha-value>)',
         alert:'rgb(var(--alert) / <alpha-value>)',
-        disable:'rgb(var(--disable) / <alpha-value>)',
+        cancel:'rgb(var(--cancel) / <alpha-value>)',
         info:'rgb(var(--info) / <alpha-value>)',
         warning:'rgb(var(--warning) / <alpha-value>)',
-        hazard:'rgb(var(--hazard) / <alpha-value>)',
+        delete:'rgb(var(--delete) / <alpha-value>)',
       },
 
       backgroundColor: {
@@ -29,6 +29,7 @@ export default {
         disable:'rgb(var(--disable) / <alpha-value>)',
         warning:'rgb(var(--warning) / <alpha-value>)',
         hazard:'rgb(var(--hazard) / <alpha-value>)',
+        delete:'rgb(var(--delete) / <alpha-value>)',
       },
 
       fill: {
@@ -41,16 +42,17 @@ export default {
         disable: 'var(--disable)',
         info: 'var(--info)',
         warning: 'var(--warning)',
-        hazard: 'var(--hazard)'
+        hazard: 'var(--hazard)',
+        delete: 'var(--delete)'
       },
 
       gridTemplateColumns: {
         'auto-fill': 'repeat(auto-fit, minmax(300px, 1fr))',
       },
       fontFamily:{
-        fontRegular: "Roboto",
-        fontBase: "Roboto-medium",
-        fontHeavy: "Roboto-bold",
+        regular: ["Roboto Regular", "Helvetica", "Arial", "sans-serif"],
+        thick: ["Roboto Medium", "Helvetica", "Arial", "sans-serif"],
+        thicker: ["Roboto Bold", "Helvetica", "Arial", "sans-serif"]
       },
       keyframe:{
         rotate:{
@@ -63,7 +65,7 @@ export default {
       },
       animation:{
         rotate:"rotate-right 2s linear infinite" ,
-        loading:"loading 2s ease-in infinite" ,
+        loading:"loading 0.5s ease-in infinite" ,
 
       }
     },

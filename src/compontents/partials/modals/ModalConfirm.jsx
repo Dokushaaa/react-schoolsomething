@@ -1,37 +1,135 @@
-import React from 'react'
-import { BiErrorCircle } from 'react-icons/bi'
-import { LiaTimesSolid, LiaTrashAltSolid, LiaTrashSolid } from 'react-icons/lia'
-import ModalWrapper from './ModalWrapper'
-import { PiArchive } from 'react-icons/pi'
-import { FaCheckCircle } from "react-icons/fa";
+import React from "react";
+import ModalWrapper from "./ModalWrapper";
+import { LiaTimesSolid } from "react-icons/lia";
+import { PiArchive } from "react-icons/pi";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { queryData } from "../../helpers/queryData";
 
-const ModalConfirm = ({position, setTooltipConfirm}) => {
-  const handleCloseConfirm = () => setTooltipConfirm(false);
+const ModalConfirm = ({
+  position,
+  setIsActive,
+  queryKey,
+  endpoint,
+  isArchiving,
+
+  setIsSuccess,
+  setMessage,
+  setIsError
+}) => {
+  const handleClose = () => setIsActive(false);
+
+  const queryClient = useQueryClient();
+  const mutation = useMutation({
+    mutationFn: (values) => queryData(endpoint, "put", values),
+    onSuccess: (data) => {
+      // Invalidate and refetch
+      queryClient.invalidateQueries({ queryKey: [queryKey] });
+
+      if (data.success) {
+        setIsActive(false);
+        setIsSuccess(true);
+        setMessage(
+          `Record successfully ${isArchiving ? "Restored" : "Archived"}.`
+        );
+      } else {
+        setIsError(true)
+        setMessage(data.error);
+      }
+    },
+  });
+
+  const handleConfirm = async () => {
+    mutation.mutate({
+      isActive: isArchiving,
+    });
+  };
   return (
-        <>
-            <ModalWrapper position={position}>
-            <div className="modal-main max-w-[400px] w-full">
-          <div className="modal-header bg-accent text-white flex justify-between items-center p-3 rounded-t-md">
-            <h4 className='mb-0 text-white'>Confirm</h4>
-            <button onClick={handleCloseConfirm}><LiaTimesSolid/></button>
+    <>
+      <ModalWrapper position={position}>
+        {/* if */}
+        {isArchiving === 0 ? (
+           <div className="modal-main max-w-[401px] w-full">
+          <div className="modal-header flex between-center bg-warning text-white p-3 px-4 rounded-t-md">
+            <h4 className="mb-0 text-white">Confirm Archive?</h4>
+            <button type="button" onClick={handleClose}>
+              <LiaTimesSolid />
+            </button>
           </div>
-          <div className="modal-body p-4 rounded-b-md  bg-secondary">
-            <div className='flex gap-4 items-center '>
-            <FaCheckCircle className='text-4xl text-accent mb-3'/>
-                <div>
-                    <h2 className='mb-2'>Save this Record?</h2>
-                    <p className='mb-5'>Are you sure you want to Save this record?</p>
-                </div>
+          <div className="modal-body p-4 rounded-b-md bg-secondary text-content">
+            <div className="flex gap-4 items-center">
+              <PiArchive className="text-4xl text-warning mb-3" />
+              <div>
+                <h2 className="mb-2">
+                  Archive Record?
+                </h2>
+                <p className="mb-5">
+                  Are you sure you want to Archive this record?
+                </p>
               </div>
-              <div className='flex justify-end gap-2  '>
-                <button className='btn btn--accent btn-form w-1/4'>Save</button>
-                <button onClick={handleCloseConfirm} className='btn btn--cancel btn-form w-1/4'>Cancel</button>
-              </div>
+            </div>
+
+            <div className="flex gap-2 justify-end">
+              <button
+                className="btn btn--warning btn-form w-1/4"
+                onClick={handleConfirm}
+              >
+                Confirm
+              </button>
+              <button
+                className="btn btn--cancel btn-form w-1/4"
+                onClick={handleClose}
+              >
+                Cancel
+              </button>
+            </div>
           </div>
         </div>
-    </ModalWrapper>
-        </>
-  )
-}
+      ) 
+      // else if archive is true
+      : isArchiving === 1 ? (   
+         <div className="modal-main max-w-[401px] w-full">
+      <div className="modal-header flex between-center bg-info text-white p-3 px-4 rounded-t-md">
+        <h4 className="mb-0 text-white">Confirm Restoration?</h4>
+        <button type="button" onClick={handleClose}>
+          <LiaTimesSolid />
+        </button>
+      </div>
+      <div className="modal-body p-4 rounded-b-md bg-secondary text-content">
+        <div className="flex flex-col gap-4 items-center">
+          <PiArchive className="text-4xl text-info mb-3" />
+          <div className="text-center">
+            <h2 className="mb-2">
+                   Restore Record?
+            </h2>
+            <p className="mb-5">
+              Are you sure you want to Restore this record?
+            </p>
+          </div>
+        </div>
 
-export default ModalConfirm
+        <div className="flex gap-2 justify-center w-full">
+          <button
+            className="btn btn--info btn-form w-1/2"
+            onClick={handleConfirm}
+          >
+            Confirm
+          </button>
+          <button
+            className="btn btn--cancel btn-form w-1/2"
+            onClick={handleClose}
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>) 
+    :
+    // else 
+    (<div>PutError.Data</div>)
+       }
+      </ModalWrapper>
+    </>
+  );
+};
+
+export default ModalConfirm;

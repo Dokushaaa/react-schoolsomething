@@ -4,6 +4,8 @@ Class Teacher {
     public $teacher_aid;
     public $teacher_name;
     public $teacher_class;
+    public $teacher_gender;
+    public $teacher_email;
     public $teacher_age;
     public $teacher_is_active;
     public $teacher_created;
@@ -24,12 +26,16 @@ Class Teacher {
              $sql = "insert into {$this->tblTeacher} ";
              $sql .= "( teacher_name, ";
              $sql .= "teacher_class, ";
+             $sql .= "teacher_gender, ";
+             $sql .= "teacher_email, ";
              $sql .= "teacher_age, ";
              $sql .= "teacher_is_active, ";
              $sql .= "teacher_created, ";
              $sql .= "teacher_datetime ) values ( ";
              $sql .= ":teacher_name, ";
              $sql .= ":teacher_class, ";
+             $sql .= ":teacher_gender, ";
+             $sql .= ":teacher_email, ";
              $sql .= ":teacher_age, ";
              $sql .= ":teacher_is_active, ";
              $sql .= ":teacher_created, ";
@@ -38,6 +44,8 @@ Class Teacher {
              $query->execute([
                 "teacher_name" => $this->teacher_name,
                 "teacher_class" => $this->teacher_class,
+                "teacher_gender" => $this->teacher_gender,
+                "teacher_email" => $this->teacher_email,
                 "teacher_age" => $this->teacher_age,
                 "teacher_is_active" => $this->teacher_is_active,
                 "teacher_created" => $this->teacher_created,
@@ -87,6 +95,8 @@ Class Teacher {
             $sql .= "teacher_name = :teacher_name, ";
             $sql .= "teacher_age = :teacher_age, ";
             $sql .= "teacher_class = :teacher_class, ";
+            $sql .= "teacher_gender = :teacher_gender, ";
+            $sql .= "teacher_email = :teacher_email, ";
             $sql .= "teacher_datetime = :teacher_datetime ";
             $sql .= "where teacher_aid  = :teacher_aid ";
             $query = $this->connection->prepare($sql);
@@ -94,6 +104,8 @@ Class Teacher {
                 "teacher_name" => $this->teacher_name,
                 "teacher_age" => $this->teacher_age,
                 "teacher_class" => $this->teacher_class,
+                "teacher_gender" => $this->teacher_gender,
+                "teacher_email" => $this->teacher_email,
                 "teacher_datetime" => $this->teacher_datetime,
                 "teacher_aid" => $this->teacher_aid,
             ]);
@@ -115,6 +127,25 @@ Class Teacher {
                 "teacher_is_active" => $this->teacher_is_active,
                 "teacher_datetime" => $this->teacher_datetime,
                 "teacher_aid" => $this->teacher_aid,
+            ]);
+        } catch (PDOException $ex) {
+            $query = false;
+        }
+        return $query;
+    }
+    // edit later
+    public function search()
+    {
+        try {
+            $sql = "select ";
+            $sql .= "* ";
+            $sql .= "from {$this->tblStudent} ";
+            $sql .= "where student_name like :student_name ";
+            $sql .= "order by student_is_active desc, ";
+            $sql .= "student_name asc ";
+            $query = $this->connection->prepare($sql);
+            $query->execute([
+                "student_name" => "%{$this->student_search}%",
             ]);
         } catch (PDOException $ex) {
             $query = false;

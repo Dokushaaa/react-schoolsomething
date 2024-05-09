@@ -162,6 +162,13 @@ function checkLimitId($start, $total)
         exit;
     }
 }
+// Read search
+function checkSearch($object)
+{
+    $query = $object->search();
+    checkQuery($query, "Empty records. (search core)");
+    return $query;
+}
 
 // Create 
 // checks if the item is created, otherwise it displays an error message
